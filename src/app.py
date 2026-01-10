@@ -1,6 +1,7 @@
 import os
 import uuid
 from flask import Flask, request, jsonify, redirect
+from mangum import Mangum
 import boto3
 from botocore.exceptions import ClientError
 
