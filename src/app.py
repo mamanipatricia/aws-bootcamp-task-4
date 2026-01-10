@@ -1,7 +1,6 @@
 import os
 import uuid
 from flask import Flask, request, jsonify, redirect
-from mangum import Mangum
 import boto3
 from botocore.exceptions import ClientError
 
@@ -69,6 +68,8 @@ def download_file(object_key):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Wrap for AWS Lambda
-handler = Mangum(app, lifespan="off")
+# Lambda handler for Flask (WSGI)
+def handler(event, context):
+    import serverless_wsgi
+    return serverless_wsgi.handle_request(app, event, context)
 
