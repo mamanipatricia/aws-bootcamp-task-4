@@ -68,9 +68,6 @@ def download_file(object_key):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Lambda handler using awsgi
-import awsgi
-
-def handler(event, context):
-    return awsgi.response(app, event, context)
+# Wrap for AWS Lambda
+handler = Mangum(app, lifespan="off")
 
