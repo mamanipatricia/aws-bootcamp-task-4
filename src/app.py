@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 # S3 client (uses IAM role in Lambda)
 s3_client = boto3.client('s3')
-BUCKET = os.environ['S3_BUCKET']
+BUCKET = os.environ['BUCKET_NAME']
 # BUCKET = 'test-bucket-lab-3-patricia'
 
 # --- Endpoint A: Prepare Upload ---
