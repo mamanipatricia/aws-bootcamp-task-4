@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Signed URL File Gateway
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 60
+    MemorySize: 512
+    Architectures: [x86_64]
+
+
+Resources:
+  FileBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub file-gateway-${AWS::AccountId}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  FileGatewayFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: app.handler
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref FileBucket
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref FileBucket
+      Events:
+        Upload:
+          Type: HttpApi
+          Properties:
+            Path: /files
+            Method: POST
+        Download:
+          Type: HttpApi
+          Properties:
+            Path: /files/{objectKey+}
+            Method: GET
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway endpoint
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
