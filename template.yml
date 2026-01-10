@@ -4,7 +4,7 @@ Description: Signed URL File Gateway
 
 Globals:
   Function:
-    Runtime: python3.11
+    Runtime: python3.12
     Timeout: 60
     MemorySize: 512
     Architectures: [x86_64]
