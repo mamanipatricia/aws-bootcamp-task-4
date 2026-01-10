@@ -31,6 +31,7 @@ jobs:
 
       - name: SAM Build and Deploy
         run: |
+          rm -rf .aws-sam/
           sam build
           sam deploy \
               --stack-name coderoad-lab-4 \
